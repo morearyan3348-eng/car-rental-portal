@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveLux - Car Rental Portal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#101828;--gold:#f4b942;--light:#f7f8fa;--muted:#667085;--white:#fff;--green:#12b76a}
+body{font-family:Inter,Arial,sans-serif;background:var(--light);color:var(--dark);line-height:1.5}
+a{text-decoration:none;color:inherit}
+button,input,select{font:inherit}
+.navbar{position:sticky;top:0;z-index:20;background:rgba(16,24,40,.96);color:#fff;padding:16px 6%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 5px 25px #0002}
+.logo{font-size:25px;font-weight:900;letter-spacing:.5px}.logo span{color:var(--gold)}
+.navlinks{display:flex;gap:25px;align-items:center}.navlinks a{color:#ddd;font-size:14px}.navlinks a:hover{color:var(--gold)}
+.menu{display:none;background:none;border:0;color:#fff;font-size:25px}
+.hero{min-height:590px;background:linear-gradient(100deg,#0b1220 25%,#101828d9 60%,#10182866),url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=85') center/cover;display:flex;align-items:center;padding:80px 6%;color:#fff}
+.hero-content{max-width:700px}.badge{display:inline-block;background:#f4b94222;color:var(--gold);border:1px solid #f4b94266;padding:8px 14px;border-radius:30px;font-weight:700;font-size:13px;margin-bottom:18px}
+h1{font-size:clamp(42px,6vw,72px);line-height:1.02;margin-bottom:20px}.hero p{font-size:18px;color:#d0d5dd;max-width:600px;margin-bottom:30px}
+.btn{border:0;border-radius:10px;padding:13px 20px;font-weight:800;cursor:pointer;transition:.2s}.primary{background:var(--gold);color:#101828}.primary:hover{transform:translateY(-2px);box-shadow:0 10px 25px #f4b94255}.outline{background:transparent;color:#fff;border:1px solid #ffffff55;margin-left:10px}
+.searchbox{margin:-48px auto 55px;position:relative;z-index:5;width:min(1100px,88%);background:#fff;padding:20px;border-radius:18px;box-shadow:0 18px 50px #1018281c;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:12px}
+.field label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin:0 0 5px 4px;text-transform:uppercase}.field input,.field select{width:100%;padding:13px;border:1px solid #d0d5dd;border-radius:9px;outline:0;background:#fff}.field input:focus,.field select:focus{border-color:var(--gold)}
+section{padding:60px 6%}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}.section-head h2{font-size:34px}.section-head p{color:var(--muted)}
+.cars{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #eaecf0;box-shadow:0 7px 25px #1018280a;transition:.25s}.card:hover{transform:translateY(-6px);box-shadow:0 18px 35px #10182818}
+.car-img{height:205px;position:relative;overflow:hidden;background:#e9eef5}.car-img img{width:100%;height:100%;object-fit:cover;transition:.4s}.card:hover .car-img img{transform:scale(1.05)}
+.tag{position:absolute;top:14px;left:14px;background:#fff;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:800}.fav{position:absolute;right:14px;top:14px;width:34px;height:34px;border:0;border-radius:50%;background:#fff;cursor:pointer;font-size:17px}
+.card-body{padding:18px}.car-title{display:flex;justify-content:space-between;gap:10px}.car-title h3{font-size:20px}.rating{color:#f79009;font-size:13px;margin-top:5px}.specs{display:flex;gap:12px;color:var(--muted);font-size:12px;margin:16px 0}.price{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #eee;padding-top:15px}.price strong{font-size:22px}.price small{color:var(--muted)}
+.features{background:#101828;color:#fff}.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}.feature{padding:24px;border:1px solid #ffffff18;border-radius:16px;background:#ffffff08}.icon{font-size:30px;margin-bottom:12px}.feature p{color:#98a2b3;font-size:13px;margin-top:6px}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}.about-img{height:390px;border-radius:20px;background:url('https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1200&q=80') center/cover}.about p{color:var(--muted);margin:15px 0}.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}.checks div{font-size:14px}.checks span{color:var(--green);font-weight:bold}
+.footer{background:#0b1220;color:#98a2b3;padding:45px 6% 25px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:35px}.footer h3{color:#fff;margin-bottom:12px}.footer a{display:block;margin:8px 0;font-size:13px}.copyright{grid-column:1/-1;border-top:1px solid #ffffff12;padding-top:20px;text-align:center;font-size:12px}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:50;padding:20px}.modal.active{display:flex}.modal-box{background:#fff;width:min(520px,100%);border-radius:18px;padding:25px;position:relative;max-height:90vh;overflow:auto}.close{position:absolute;right:18px;top:14px;border:0;background:none;font-size:25px;cursor:pointer}.modal-box h2{margin-bottom:4px}.selected{color:var(--muted);margin-bottom:20px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-group{margin-bottom:13px}.form-group.full{grid-column:1/-1}.form-group label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.form-group input,.form-group select{width:100%;padding:11px;border:1px solid #d0d5dd;border-radius:8px}.total{background:#f2f4f7;padding:14px;border-radius:10px;margin:10px 0 16px;display:flex;justify-content:space-between;font-weight:800}
+.empty{text-align:center;padding:50px;color:var(--muted);grid-column:1/-1}
+.toast{position:fixed;right:20px;bottom:20px;background:#101828;color:#fff;padding:14px 18px;border-radius:10px;display:none;z-index:80;box-shadow:0 10px 30px #0004}.toast.show{display:block}
+@media(max-width:900px){.cars{grid-template-columns:repeat(2,1fr)}.feature-grid{grid-template-columns:repeat(2,1fr)}.searchbox{grid-template-columns:1fr 1fr}.searchbox .btn{grid-column:1/-1}.footer{grid-template-columns:1fr 1fr}.about{grid-template-columns:1fr}}
+@media(max-width:650px){.navlinks{display:none}.menu{display:block}.cars{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr}.searchbox{grid-template-columns:1fr}.searchbox .btn{grid-column:auto}.hero{min-height:540px}.hero .outline{margin-left:5px}.footer{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:auto}.section-head{display:block}.section-head p{margin-top:7px}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a class="logo" href="#">Drive<span>Lux</span></a>
+  <div class="navlinks"><a href="#home">Home</a><a href="#cars">Cars</a><a href="#services">Services</a><a href="#about">About</a><a href="#contact">Contact</a></div>
+  <button class="menu" onclick="toggleMenu()">☰</button>
+</nav>
+
+<header class="hero" id="home">
+  <div class="hero-content">
+    <span class="badge">PREMIUM CAR RENTAL PORTAL</span>
+    <h1>Drive your journey.<br><span style="color:#f4b942">Your way.</span></h1>
+    <p>Rent reliable cars at transparent prices. Choose your car, select your dates and start your journey in minutes.</p>
+    <a class="btn primary" href="#cars">Explore Cars →</a>
+    <a class="btn outline" href="#about">Why DriveLux?</a>
+  </div>
+</header>
+
+<div class="searchbox">
+  <div class="field"><label>Search Car</label><input id="search" type="text" placeholder="e.g. Creta, Thar"></div>
+  <div class="field"><label>Category</label><select id="category"><option value="all">All Categories</option><option>SUV</option><option>Sedan</option><option>Hatchback</option><option>Luxury</option></select></div>
+  <div class="field"><label>Pickup Date</label><input id="pickup" type="date"></div>
+  <div class="field"><label>Return Date</label><input id="drop" type="date"></div>
+  <button class="btn primary" onclick="applyFilters()">Search</button>
+</div>
+
+<section id="cars">
+  <div class="section-head"><div><h2>Popular Cars</h2><p>Choose from our ready-to-rent fleet.</p></div><span id="count" style="color:#667085;font-size:14px"></span></div>
+  <div class="cars" id="carGrid"></div>
+</section>
+
+<section class="features" id="services">
+  <div class="section-head"><div><h2 style="color:#fff">Why choose DriveLux?</h2><p>Simple, safe and convenient car rental.</p></div></div>
+  <div class="feature-grid">
+    <div class="feature"><div class="icon">💳</div><h3>Transparent Pricing</h3><p>No hidden rental charges. See the daily price before booking.</p></div>
+    <div class="feature"><div class="icon">🛡️</div><h3>Verified Cars</h3><p>Clean and maintained vehicles for comfortable journeys.</p></div>
+    <div class="feature"><div class="icon">⚡</div><h3>Quick Booking</h3><p>Book your preferred car in a few simple steps.</p></div>
+    <div class="feature"><div class="icon">📞</div><h3>24/7 Support</h3><p>Our support team is available whenever you need help.</p></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about">
+    <div class="about-img"></div>
+    <div><span class="badge" style="background:#101828;color:#f4b942">ABOUT US</span><h2 style="font-size:38px;margin-top:12px">A better way to rent a car.</h2>
+    <p>DriveLux is a modern car rental portal concept designed for students, businesses and travelers who want a simple online rental experience.</p>
+    <div class="checks"><div>✓ Easy online booking</div><div>✓ Multiple car categories</div><div>✓ Flexible rental dates</div><div>✓ Mobile-friendly portal</div></div>
+    <a class="btn primary" href="#cars">Book a Car</a></div>
+  </div>
+</section>
+
+<footer class="footer" id="contact">
+  <div><h3>Drive<span style="color:#f4b942">Lux</span></h3><p>A modern car rental portal for easy and comfortable travel.</p></div>
+  <div><h3>Quick Links</h3><a href="#home">Home</a><a href="#cars">Cars</a><a href="#services">Services</a></div>
+  <div><h3>Categories</h3><a href="#cars">SUV</a><a href="#cars">Sedan</a><a href="#cars">Hatchback</a></div>
+  <div><h3>Contact</h3><a href="tel:+919876543210">+91 98765 43210</a><a href="mailto:hello@drivelux.in">hello@drivelux.in</a><p>India</p></div>
+  <div class="copyright">© 2026 DriveLux Car Rental Portal. All rights reserved.</div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+    <h2>Book Your Car</h2><p class="selected" id="selectedCar"></p>
+    <div class="form-grid">
+      <div class="form-group"><label>Full Name</label><input id="name" placeholder="Your name"></div>
+      <div class="form-group"><label>Mobile Number</label><input id="phone" placeholder="10-digit mobile"></div>
+      <div class="form-group"><label>Pickup Date</label><input id="bPickup" type="date"></div>
+      <div class="form-group"><label>Return Date</label><input id="bDrop" type="date"></div>
+      <div class="form-group full"><label>Pickup Location</label><input id="location" placeholder="Enter pickup location"></div>
+    </div>
+    <div class="total"><span>Estimated Total</span><span id="total">₹0</span></div>
+    <button class="btn primary" style="width:100%" onclick="confirmBooking()">Confirm Booking</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const cars=[
+ {name:"Maruti Swift",cat:"Hatchback",price:1299,seats:5,gear:"Manual",fuel:"Petrol",rating:"4.7",img:"https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80"},
+ {name:"Hyundai Creta",cat:"SUV",price:2199,seats:5,gear:"Automatic",fuel:"Petrol",rating:"4.8",img:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80"},
+ {name:"Tata Nexon",cat:"SUV",price:1899,seats:5,gear:"Manual",fuel:"Diesel",rating:"4.6",img:"https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=900&q=80"},
+ {name:"Toyota Innova Crysta",cat:"SUV",price:2999,seats:7,gear:"Automatic",fuel:"Diesel",rating:"4.9",img:"https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=900&q=80"},
+ {name:"Mahindra Thar",cat:"SUV",price:2499,seats:4,gear:"Manual",fuel:"Diesel",rating:"4.8",img:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=900&q=80"},
+ {name:"Honda City",cat:"Sedan",price:1999,seats:5,gear:"Automatic",fuel:"Petrol",rating:"4.7",img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=80"},
+ {name:"Kia Seltos",cat:"SUV",price:2299,seats:5,gear:"Automatic",fuel:"Petrol",rating:"4.8",img:"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80"},
+ {name:"BMW 3 Series",cat:"Luxury",price:5999,seats:5,gear:"Automatic",fuel:"Petrol",rating:"4.9",img:"https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=900&q=80"}
+];
+let selected=null;
+const grid=document.getElementById("carGrid");
+function render(list=cars){
+ grid.innerHTML="";
+ document.getElementById("count").textContent=list.length+" cars available";
+ if(!list.length){grid.innerHTML='<div class="empty">No cars found. Try another search or category.</div>';return}
+ list.forEach((c,i)=>{
+  grid.innerHTML+=`<article class="card">
+   <div class="car-img"><img src="${c.img}" alt="${c.name}" loading="lazy"><span class="tag">${c.cat}</span><button class="fav" onclick="fav(this)">♡</button></div>
+   <div class="card-body"><div class="car-title"><div><h3>${c.name}</h3><div class="rating">★ ${c.rating} · Excellent</div></div></div>
+   <div class="specs"><span>👥 ${c.seats} Seats</span><span>⚙ ${c.gear}</span><span>⛽ ${c.fuel}</span></div>
+   <div class="price"><div><strong>₹${c.price.toLocaleString()}</strong><small> / day</small></div><button class="btn primary" onclick="openModal(${i})">Rent Now</button></div></div>
+  </article>`;
+ });
+}
+function applyFilters(){
+ const q=document.getElementById("search").value.toLowerCase(), cat=document.getElementById("category").value;
+ render(cars.filter(c=>(c.name.toLowerCase().includes(q)||c.cat.toLowerCase().includes(q))&&(cat==="all"||c.cat===cat)));
+ document.getElementById("cars").scrollIntoView({behavior:"smooth"});
+}
+document.getElementById("search").addEventListener("input",applyFilters);
+document.getElementById("category").addEventListener("change",applyFilters);
+function fav(btn){btn.textContent=btn.textContent==="♡"?"♥":"♡";btn.style.color=btn.textContent==="♥"?"#e63946":""}
+function openModal(i){
+ selected=cars[i];document.getElementById("selectedCar").textContent=selected.name+" · ₹"+selected.price.toLocaleString()+" / day";
+ document.getElementById("bPickup").value=document.getElementById("pickup").value;
+ document.getElementById("bDrop").value=document.getElementById("drop").value;
+ document.getElementById("modal").classList.add("active");calcTotal();
+}
+function closeModal(){document.getElementById("modal").classList.remove("active")}
+document.getElementById("bPickup").addEventListener("change",calcTotal);
+document.getElementById("bDrop").addEventListener("change",calcTotal);
+function calcTotal(){
+ if(!selected)return;let a=new Date(document.getElementById("bPickup").value),b=new Date(document.getElementById("bDrop").value);
+ let days=(!isNaN(a)&&!isNaN(b)&&b>a)?Math.ceil((b-a)/86400000):1;
+ document.getElementById("total").textContent="₹"+(selected.price*days).toLocaleString()+" ("+days+" day"+(days>1?"s":"")+")";
+}
+function confirmBooking(){
+ const name=document.getElementById("name").value.trim(),phone=document.getElementById("phone").value.trim(),loc=document.getElementById("location").value.trim();
+ if(!name||!/^[0-9]{10}$/.test(phone)||!loc){showToast("Please enter valid name, 10-digit mobile and pickup location.");return}
+ closeModal();showToast("Booking request confirmed for "+selected.name+"!");document.getElementById("name").value="";document.getElementById("phone").value="";document.getElementById("location").value="";
+}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3500)}
+function toggleMenu(){const n=document.querySelector(".navlinks");n.style.display=n.style.display==="flex"?"none":"flex";n.style.flexDirection="column";n.style.position="absolute";n.style.top="65px";n.style.right="6%";n.style.background="#101828";n.style.padding="18px";n.style.borderRadius="12px"}
+const today=new Date().toISOString().split("T")[0];document.getElementById("pickup").min=today;document.getElementById("drop").min=today;
+render();
+</script>
+</body>
+</html>
